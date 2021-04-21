@@ -1,4 +1,4 @@
-# nlw05-react-trail
+# NLW05_TRAIL_REACT
 
  React.js trail in NLW#5 bootcamp.
 
