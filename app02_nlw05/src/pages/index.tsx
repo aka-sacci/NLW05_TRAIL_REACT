@@ -1,10 +1,17 @@
 import {GetStaticProps} from 'next';
 import Image from 'next/image';
+import Link from 'next/link';
+
+
 import { api } from '../services/api';
-import { format, parseISO } from 'date-fns'
+
+import { format, parseISO } from 'date-fns';
 import ptBR from 'date-fns/locale/pt-BR';
+
 import { convertDurationToString } from '../utils/convertDurationToTimeString';
+
 import homeStyles from './home.module.scss';
+
 
 
 type Episode = {
@@ -46,26 +53,77 @@ export default function Home({ lastestEpisodes, allEpisodes}: HomeProps) {
             objectFit = "cover"/>
 
             <div className={homeStyles.details}>
-              <a href="">{ep.title}</a>
+              <Link href={`/episodes/${ep.id}`}>
+              <a>{ep.title}</a>
+              </Link>
               <p>{ep.members}</p>
               
               <span>{ep.publishedAt}</span>
               <span>{ep.durationAsString}</span>
-              
             </div>
- 
-         
+            <button type="button">
+              <img src="/play-green.svg"/>
+            </button>
+           
 
           </li>
         )
       })}
-
       </ul>
      </section>
 
 
      <section className={homeStyles.all}>
+      <h2>Todos os episódios</h2>
 
+      <table cellSpacing={0}>
+        <thead>
+          <tr>
+          <th></th>
+          <th>Podcast</th>
+          <th>Integrantes</th>
+          <th>Data</th>
+          <th>Duração</th>
+          <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          {allEpisodes.map(ep => {
+            return(
+            <tr key={ep.id}>
+
+              <td style={{ width : 60  }}>
+              <Image 
+            width={192} 
+            height={192} 
+            src={ep.thumbnail}
+            alt={ep.title}
+            objectFit = "cover"/>
+              </td>
+
+              <td>
+                <Link href={`/episodes/${ep.id}`}>
+                <a>{ep.title}</a>
+                </Link>
+              </td>
+
+              <td>{ep.members}</td>
+
+              <td style={{ width : 90 }}>{ep.publishedAt}</td>
+              
+              <td>{ep.durationAsString}</td>
+
+              <td>
+                <button type="button">
+                <img src="/play-green.svg"/>
+                </button>
+            </td>
+
+            </tr>
+            )
+          })}
+        </tbody>
+      </table>
      </section>
     </div>
   )
