@@ -3,9 +3,12 @@ import ptBR from "date-fns/locale/pt-BR";
 import { GetStaticPaths, GetStaticProps } from "next";
 import Image from "next/image";
 import Link from "next/link";
+import { useContext } from "react";
+import { PlayerContext } from "../../contexts/playerContext";
 import { api } from "../../services/api";
 import { convertDurationToString } from "../../utils/convertDurationToTimeString";
 import epStyles from './episodes.module.scss';
+import Header from 'next/head';
 
 
 type SingleEpisode = {
@@ -28,9 +31,14 @@ type SingleEpisode = {
  }
  
 export default function Episode({ ep }: EpisodeProps){
-
+const { play } = useContext(PlayerContext);
     return(
         <div className={epStyles.episode}>
+
+        <Header>
+       <title>{ep.title} - Podcastr</title>
+       </Header> 
+
             <div className={epStyles.thumbContainer}>
                 <Link href="/">
                 <button type="button">
@@ -43,7 +51,7 @@ export default function Episode({ ep }: EpisodeProps){
         src={ep.thumbnail}
         objectFit="cover"
         />
-        <button type="button">
+        <button type="button" onClick={() => play(ep)}>
                     <img src="/play.svg" alt="Tocar Episódio"></img>
                 </button>
                 </div>
@@ -65,8 +73,24 @@ export default function Episode({ ep }: EpisodeProps){
 
 export const getStaticPaths: GetStaticPaths = async () => {
 
+    const { data } = await api.get('episodes', {
+        params: {
+          _sort: 'published_at',
+          _order: 'desc',
+          _limit: 2
+        }
+        });
+
+        const paths = data.map(episode => {
+            return{
+                params:{
+              id: episode.id,
+                }
+            }
+          });
+
     return{
-        paths: [],
+        paths,
         fallback: 'blocking'
     }
 

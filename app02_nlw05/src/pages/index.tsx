@@ -11,6 +11,9 @@ import ptBR from 'date-fns/locale/pt-BR';
 import { convertDurationToString } from '../utils/convertDurationToTimeString';
 
 import homeStyles from './home.module.scss';
+import { useContext } from 'react';
+import { PlayerContext } from '../contexts/playerContext';
+import Header from 'next/head'
 
 
 
@@ -34,15 +37,22 @@ type HomeProps = {
 }
 
 export default function Home({ lastestEpisodes, allEpisodes}: HomeProps) {
+  const episodeList = [...lastestEpisodes, ...allEpisodes];
+
+  const { playList } = useContext(PlayerContext);
+  
   return (
+    
     <div className={homeStyles.homepage}>
-     
+     <Header>
+       <title>Podcastr - Bem Vindo!</title>
+       </Header>  
      <section className={homeStyles.lastest}>
-      <h2>Últimos Lançamentos</h2>
+      <h2>Últimos Lançamentos </h2>
 
       <ul>
 
-      {lastestEpisodes.map(ep => {
+      {lastestEpisodes.map((ep, index) => {
         return(
           <li key={ep.id}>
             <Image 
@@ -61,7 +71,7 @@ export default function Home({ lastestEpisodes, allEpisodes}: HomeProps) {
               <span>{ep.publishedAt}</span>
               <span>{ep.durationAsString}</span>
             </div>
-            <button type="button">
+            <button type="button" onClick={() => playList(episodeList, index)}>
               <img src="/play-green.svg"/>
             </button>
            
@@ -88,7 +98,7 @@ export default function Home({ lastestEpisodes, allEpisodes}: HomeProps) {
           </tr>
         </thead>
         <tbody>
-          {allEpisodes.map(ep => {
+          {allEpisodes.map((ep, index) => {
             return(
             <tr key={ep.id}>
 
@@ -114,7 +124,7 @@ export default function Home({ lastestEpisodes, allEpisodes}: HomeProps) {
               <td>{ep.durationAsString}</td>
 
               <td>
-                <button type="button">
+                <button type="button" onClick={() => playList(episodeList, index + lastestEpisodes.length)}>
                 <img src="/play-green.svg"/>
                 </button>
             </td>

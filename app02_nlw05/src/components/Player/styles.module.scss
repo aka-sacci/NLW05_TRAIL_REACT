@@ -30,6 +30,33 @@
     }
  }
 
+.currentEpisode{
+
+    text-align: center;
+
+    img{
+        border-radius: 1.5rem;
+    }
+    strong {
+        
+        display: block;
+        margin-top: 2rem;
+        font: 800 1.25rem Lexend, sans-serif;
+        line-height: 1.35;
+
+        &:last-child{
+
+        display: block;
+        margin-top: 2rem;
+        font: 500 1rem Lexend, sans-serif;
+        line-height: 1.5; 
+        color: var(--gray-100);  
+        opacity: 0.9;
+        }
+    }
+
+}
+
 .emptyPlayer{
 
     width: 50%;
@@ -79,11 +106,27 @@
     margin-top: 2.5rem;
     gap: 1.5rem;
 
+ 
+
     button{
 
         background: transparent;
         border: 0;
         font-size: 0;
+        
+        &:disabled {
+            opacity : 0.2;
+        }  
+        
+        &.isActive{
+
+            filter: invert(0.35) sepia(1) saturate(3) hue-rotate(100deg);
+        }
+
+        &.isActive:hover{
+            
+            filter: brightness(0.6) invert(0.35) sepia(1) saturate(3) hue-rotate(100deg);
+        }
         
     }
 
